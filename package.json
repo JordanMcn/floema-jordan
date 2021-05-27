@@ -2,9 +2,11 @@
   "name": "floema",
   "version": "1.0.0",
   "scripts": {
-    "start": "npm run development",
-    "development": "webpack serve --progress --config webpack.config.development.js",
-    "build": "webpack --progress --config webpack.config.build.js"
+    "backend:build": "node app.js",
+    "backend:dev": "nodemon app.js",
+    "start": "concurrently --kill-others \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "frontend:dev": "webpack serve --progress --config webpack.config.development.js",
+    "frontend:build": "webpack --progress --config webpack.config.build.js"
   },
   "author": "Jordan Marcon",
   "license": "ISC",
@@ -25,6 +27,7 @@
     "imagemin-gifsicle": "^7.0.0",
     "imagemin-jpegtran": "^7.0.0",
     "imagemin-optipng": "^8.0.0",
+    "include-media": "^1.4.10",
     "mini-css-extract-plugin": "^1.6.0",
     "postcss-loader": "^5.2.0",
     "raw-loader": "^4.0.2",
@@ -34,5 +37,17 @@
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3"
+  },
+  "dependencies": {
+    "@prismicio/client": "^4.0.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^9.0.2",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1",
+    "method-override": "^3.0.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7",
+    "prismic-dom": "^2.2.5",
+    "pug": "^3.0.2"
   }
 }

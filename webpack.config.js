@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
@@ -58,7 +59,9 @@ module.exports = {
           ['optipng', { optimizationLevel: 5 }]
         ]
       }
-    })
+    }),
+
+    new CleanWebpackPlugin()
   ],
 
   module: {

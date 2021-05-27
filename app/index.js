@@ -11,3 +11,5 @@ test()
 window.setTimeout(() => {
   console.log('test')
 }, 2000)
+
+console.log('test')
