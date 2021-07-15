@@ -37,6 +37,7 @@ export default class Preloader extends Component {
   createLoader () {
     this.elements.images.forEach(element => {
       element.src = element.getAttribute('data-src')
+      // console.log(element.src)
       element.onload = _ => this.onAssetLoaded(element)
     })
   }

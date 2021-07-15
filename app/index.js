@@ -10,7 +10,10 @@ class App {
     this.createContent()
     this.createPages()
 
+    this.addEventListeners()
     this.addLinkListeners()
+
+    this.update()
   }
 
   createPreloader () {
@@ -37,9 +40,15 @@ class App {
 
   onPreloaded () {
     this.preloader.destroy()
+
+    this.onResize()
+
     this.page.show()
   }
 
+  /**
+   * Events
+   */
   async onChange (url) {
     await this.page.hide()
     const request = await window.fetch(url)
@@ -58,13 +67,40 @@ class App {
       this.content.innerHTML = divContent.innerHTML
 
       this.page = this.pages[this.template]
+
       this.page.create()
+
+      this.onResize()
       this.page.show()
 
       this.addLinkListeners()
     } else {
       console.log('error')
     }
+  }
+
+  onResize () {
+    if (this?.page?.onResize) {
+      this.page.onResize()
+    }
+  }
+
+  /**
+   * Loop
+   */
+  update () {
+    if (this?.page?.update) {
+      this.page.update()
+    }
+
+    this.frame = window.requestAnimationFrame(this.update.bind(this))
+  }
+
+  /**
+   * Listeners
+   */
+  addEventListeners () {
+    window.addEventListener('resize', this.onResize.bind(this))
   }
 
   addLinkListeners () {
