@@ -1,5 +1,13 @@
 import GSAP from 'gsap'
+import NormalizeWheel from 'normalize-wheel'
+import { each } from 'lodash'
 import Prefix from 'prefix'
+import map from 'lodash/map'
+
+import Label from 'animations/Label'
+import Paragraph from 'animations/Paragraph'
+import Title from 'animations/Title'
+import Highlight from '../animations/Highlight'
 
 export default class Page {
   constructor ({
@@ -9,7 +17,11 @@ export default class Page {
   }) {
     this.selector = element
     this.selectorChildren = {
-      ...elements
+      ...elements,
+      animationsHighlights: '[data-animation="highlight"]',
+      animationsLabels: '[data-animation="label"]',
+      animationsParagraphs: '[data-animation="paragraph"]',
+      animationsTitles: '[data-animation="title"]'
     }
 
     this.id = id
@@ -42,6 +54,35 @@ export default class Page {
         }
       }
     }
+
+    this.createAnimations()
+  }
+
+  createAnimations () {
+    this.animations = []
+
+    this.animationsHighlights = map(this.elements.animationsHighlights, element => {
+      return new Highlight({ element })
+    })
+
+    this.animationsLabels = map(this.elements.animationsLabels, element => {
+      return new Label({ element })
+    })
+
+    this.animationsParagraphs = map(this.elements.animationsParagraphs, element => {
+      return new Paragraph({ element })
+    })
+
+    this.animationsTitles = map(this.elements.animationsTitles, element => {
+      return new Title({ element })
+    })
+
+    this.animations.push(
+      ...this.animationsHighlights,
+      ...this.animationsLabels,
+      ...this.animationsParagraphs,
+      ...this.animationsTitles
+    )
   }
 
   show () {
@@ -78,15 +119,17 @@ export default class Page {
   }
 
   onMouseWheel (event) {
-    const { deltaY } = event
+    const { pixelY } = NormalizeWheel(event)
 
-    this.scroll.target += deltaY
+    this.scroll.target += pixelY
   }
 
   onResize () {
     if (this.elements.wrapper) {
       this.scroll.limit = this.elements.wrapper.clientHeight - window.innerHeight
     }
+
+    each(this.animations, animation => animation.onResize())
   }
 
   update () {
@@ -104,10 +147,10 @@ export default class Page {
   }
 
   addEventListeners () {
-    window.addEventListener('wheel', this.onMouseWheelEvent)
+    window.addEventListener('mousewheel', this.onMouseWheelEvent)
   }
 
   removeEventListeners () {
-    window.removeEventListener('wheel', this.onMouseWheelEvent)
+    window.removeEventListener('mousewheel', this.onMouseWheelEvent)
   }
 }

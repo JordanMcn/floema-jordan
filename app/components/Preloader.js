@@ -30,14 +30,12 @@ export default class Preloader extends Component {
 
     this.elements.titleSpans = this.elements.title.querySelectorAll('span span')
 
-    console.log(this.element, this.elements)
     this.createLoader()
   }
 
   createLoader () {
     this.elements.images.forEach(element => {
       element.src = element.getAttribute('data-src')
-      // console.log(element.src)
       element.onload = _ => this.onAssetLoaded(element)
     })
   }
@@ -58,8 +56,6 @@ export default class Preloader extends Component {
       this.animateOut = GSAP.timeline({
         delay: 2
       })
-
-      console.log(this.elements.titleSpans)
 
       this.animateOut.to(this.elements.titleSpans, {
         duration: 1.5,

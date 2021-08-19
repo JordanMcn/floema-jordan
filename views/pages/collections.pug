@@ -18,8 +18,6 @@ block content
               a.collections__gallery__link(href=Link(product.products_product))
                 figure.collections__gallery__media
                   img.collections__gallery__media__image(alt=product.products_product.data.image.alt data-src=product.products_product.data.image.url)
-                  //script
-                    | console.log(!{JSON.stringify(product.products_product.data.image.url)})
 
       .collections__content
         each collection, index in collections

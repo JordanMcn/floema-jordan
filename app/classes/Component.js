@@ -1,5 +1,4 @@
 import EventEmitter from 'events'
-import GSAP from 'gsap'
 
 export default class Component extends EventEmitter {
   constructor ({
@@ -20,7 +19,11 @@ export default class Component extends EventEmitter {
   }
 
   create () {
-    this.element = document.querySelector(this.selector)
+    if (this.selector instanceof window.HTMLElement) {
+      this.element = this.selector
+    } else {
+      this.element = document.querySelector(this.selector)
+    }
     this.elements = {}
 
     for (const [key, entry] of Object.entries(this.selectorChildren)) {
