@@ -9,6 +9,8 @@ html {
   font-size: calc(100vw / 1920 * 10);
   line-height: 1;
   overflow: hidden;
+  background: $color-contessa;
+  color: $color-quarter-spanish-white;
 
   @include media('<phone') {
     font-size: calc(100vw / 750 * 10);
@@ -38,7 +40,13 @@ button {
 }
 
 img {
+  opacity: 0;
+  transition: opacity 0.4s ease;
   vertical-align: middle;
+
+  &.loaded {
+    opacity: 1;
+  }
 }
 
 .content {
