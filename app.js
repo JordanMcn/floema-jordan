@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const Prismic = require('@prismicio/client')
 const PrismicDOM = require('prismic-dom')
+const UAParser = require('ua-parser-js')
 
 // Initialize the prismic.io api
 const initApi = req => {
@@ -48,6 +49,12 @@ const linkResolver = doc => {
 
 // Middleware to inject prismic context
 app.use((req, res, next) => {
+  const ua = UAParser(req.headers['user-agent'])
+
+  res.locals.isDesktop = ua.device.type === undefined
+  res.locals.isPhone = ua.device.type === 'mobile'
+  res.locals.isTablet = ua.device.type === 'tablet'
+
   res.locals.Link = linkResolver
 
   res.locals.Numbers = index => ['One', 'Two', 'Three', 'Four'][index]

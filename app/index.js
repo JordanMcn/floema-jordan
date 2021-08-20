@@ -1,6 +1,8 @@
 import Preloader from 'components/Preloader'
 import Navigation from 'components/Navigation'
 
+import Detection from 'classes/Detection'
+
 import About from 'pages/About'
 import Collections from 'pages/Collections'
 import Detail from 'pages/Detail'
@@ -56,16 +58,27 @@ class App {
     this.page.show()
   }
 
+  onPopState () {
+    this.onChange({
+      url: window.location.pathname,
+      push: false
+    })
+  }
+
   /**
    * Events
    */
-  async onChange (url) {
+  async onChange ({ url, push = true }) {
     await this.page.hide()
     const request = await window.fetch(url)
 
     if (request.status === 200) {
       const html = await request.text()
       const div = document.createElement('div')
+
+      if (push) {
+        window.history.pushState({}, '', url)
+      }
 
       div.innerHTML = html
 
@@ -111,6 +124,8 @@ class App {
    * Listeners
    */
   addEventListeners () {
+    window.addEventListener('popstate', this.onPopState.bind(this))
+
     window.addEventListener('resize', this.onResize.bind(this))
   }
 
@@ -123,7 +138,7 @@ class App {
 
         const { href } = link
 
-        this.onChange(href)
+        this.onChange({ url: href })
       }
     })
   }
