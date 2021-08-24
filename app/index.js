@@ -1,3 +1,4 @@
+import Canvas from 'components/Canvas'
 import Preloader from 'components/Preloader'
 import Navigation from 'components/Navigation'
 
@@ -14,6 +15,7 @@ class App {
 
     this.createPreloader()
     this.createNavigation()
+    this.createCanvas()
     this.createPages()
 
     this.addEventListeners()
@@ -31,6 +33,10 @@ class App {
   createPreloader () {
     this.preloader = new Preloader()
     this.preloader.once('completed', this.onPreloaded.bind(this))
+  }
+
+  createCanvas () {
+    this.canvas = new Canvas()
   }
 
   createContent () {
@@ -104,6 +110,10 @@ class App {
   }
 
   onResize () {
+    if (this?.canvas?.onResize) {
+      this.canvas.onResize()
+    }
+
     if (this?.page?.onResize) {
       this.page.onResize()
     }
@@ -113,6 +123,10 @@ class App {
    * Loop
    */
   update () {
+    if (this?.canvas?.update) {
+      this.canvas.update()
+    }
+
     if (this?.page?.update) {
       this.page.update()
     }
