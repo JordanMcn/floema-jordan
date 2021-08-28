@@ -2,7 +2,7 @@ import Canvas from 'components/Canvas'
 import Preloader from 'components/Preloader'
 import Navigation from 'components/Navigation'
 
-import Detection from 'classes/Detection'
+// import Detection from 'classes/Detection'
 
 import About from 'pages/About'
 import Collections from 'pages/Collections'
@@ -119,6 +119,24 @@ class App {
     }
   }
 
+  onTouchDown (event) {
+    if (this?.canvas?.onTouchDown) {
+      this.canvas.onTouchDown(event)
+    }
+  }
+
+  onTouchMove (event) {
+    if (this?.canvas?.onTouchMove) {
+      this.canvas.onTouchMove(event)
+    }
+  }
+
+  onTouchUp (event) {
+    if (this?.canvas?.onTouchUp) {
+      this.canvas.onTouchUp(event)
+    }
+  }
+
   /**
    * Loop
    */
@@ -138,8 +156,15 @@ class App {
    * Listeners
    */
   addEventListeners () {
-    window.addEventListener('popstate', this.onPopState.bind(this))
+    window.addEventListener('mousedown', this.onTouchDown.bind(this))
+    window.addEventListener('mousemove', this.onTouchMove.bind(this))
+    window.addEventListener('mouseup', this.onTouchUp.bind(this))
 
+    window.addEventListener('touchstart', this.onTouchDown.bind(this))
+    window.addEventListener('touchmove', this.onTouchMove.bind(this))
+    window.addEventListener('touchend', this.onTouchUp.bind(this))
+
+    window.addEventListener('popstate', this.onPopState.bind(this))
     window.addEventListener('resize', this.onResize.bind(this))
   }
 
