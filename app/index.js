@@ -1,3 +1,5 @@
+import NormalizeWheel from 'normalize-wheel'
+
 import Canvas from 'components/Canvas'
 import Preloader from 'components/Preloader'
 import Navigation from 'components/Navigation'
@@ -110,13 +112,15 @@ class App {
   }
 
   onResize () {
-    if (this?.canvas?.onResize) {
-      this.canvas.onResize()
-    }
-
     if (this?.page?.onResize) {
       this.page.onResize()
     }
+
+    window.requestAnimationFrame(_ => {
+      if (this?.canvas?.onResize) {
+        this.canvas.onResize()
+      }
+    })
   }
 
   onTouchDown (event) {
@@ -134,6 +138,18 @@ class App {
   onTouchUp (event) {
     if (this?.canvas?.onTouchUp) {
       this.canvas.onTouchUp(event)
+    }
+  }
+
+  onWheel (event) {
+    const normalizedWheel = NormalizeWheel(event)
+
+    if (this?.canvas?.onWheel) {
+      this.canvas.onWheel(normalizedWheel)
+    }
+
+    if (this?.page?.onWheel) {
+      this.page.onWheel(normalizedWheel)
     }
   }
 
@@ -156,6 +172,8 @@ class App {
    * Listeners
    */
   addEventListeners () {
+    window.addEventListener('mousewheel', this.onWheel.bind(this))
+
     window.addEventListener('mousedown', this.onTouchDown.bind(this))
     window.addEventListener('mousemove', this.onTouchMove.bind(this))
     window.addEventListener('mouseup', this.onTouchUp.bind(this))
