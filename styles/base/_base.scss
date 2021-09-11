@@ -38,6 +38,11 @@ a {
   text-decoration: none;
 }
 
+canvas {
+  pointer-events: none;
+  position: fixed;
+}
+
 button {
   color: inherit;
   background: none;
