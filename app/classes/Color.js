@@ -6,7 +6,7 @@ class Color {
     color
   }) {
     GSAP.to(document.documentElement, {
-      backgroundColor,
+      background: backgroundColor,
       color,
       duration: 1.5
     })

@@ -28,12 +28,6 @@ export default class Collections {
 
     this.scroll = {
       current: 0,
-      target: 0,
-      lerp: 0.1
-    }
-
-    this.scroll = {
-      current: 0,
       start: 0,
       target: 0,
       lerp: 0.1,
@@ -147,6 +141,8 @@ export default class Collections {
 
     map(this.medias, media => {
       media.update(this.scroll.current)
+
+      media.mesh.position.y += Math.cos((media.mesh.position.x / this.sizes.width) * Math.PI * 0.1) * 40 - 40
     })
 
     const index = Math.floor(Math.abs(this.scroll.current / this.scroll.limit) * this.medias.length)

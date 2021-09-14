@@ -2,8 +2,8 @@ import GSAP from 'gsap'
 
 import Animation from 'classes/Animation'
 
-import { calculate, split } from 'utils/text'
-import { each } from 'lodash'
+// import { calculate, split } from 'utils/text'
+// import { each } from 'lodash'
 
 export default class Title extends Animation {
   constructor ({ element, elements }) {
@@ -12,31 +12,39 @@ export default class Title extends Animation {
       elements
     })
 
-    split({ element: this.element, append: true })
-    split({ element: this.element, append: true })
-
-    this.elementLinesSpans = this.element.querySelectorAll('span span')
+    // split({ element: this.element, append: true })
+    // split({ element: this.element, append: true })
+    //
+    // this.elementLinesSpans = this.element.querySelectorAll('span span')
   }
 
   animateIn () {
-    this.timelineIn = GSAP.timeline({
+    GSAP.fromTo(this.element, {
+      autoAlpha: 0,
       delay: 0.5
+    }, {
+      autoAlpha: 1,
+      duration: 1
     })
 
-    this.timelineIn.set(this.element, {
-      autoAlpha: 1
-    })
+    // this.timelineIn = GSAP.timeline({
+    //   delay: 0.5
+    // })
 
-    each(this.elementsLines, (line, index) => {
-      this.timelineIn.fromTo(line, {
-        y: '100%'
-      }, {
-        delay: index * 0.1,
-        duration: 1.5,
-        ease: 'expo.out',
-        y: '0%'
-      }, 0)
-    })
+    // this.timelineIn.set(this.element, {
+    //   autoAlpha: 1
+    // })
+
+    // each(this.elementsLines, (line, index) => {
+    //   this.timelineIn.fromTo(line, {
+    //     y: '100%'
+    //   }, {
+    //     delay: index * 0.1,
+    //     duration: 1.5,
+    //     ease: 'expo.out',
+    //     y: '0%'
+    //   }, 0)
+    // })
   }
 
   animateOut () {
@@ -45,7 +53,7 @@ export default class Title extends Animation {
     })
   }
 
-  onResize () {
-    this.elementsLines = calculate(this.elementLinesSpans)
-  }
+  // onResize () {
+  //   this.elementsLines = calculate(this.elementLinesSpans)
+  // }
 }
