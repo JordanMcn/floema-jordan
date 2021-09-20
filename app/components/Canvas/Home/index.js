@@ -39,6 +39,12 @@ export default class Home {
       y: 0
     }
 
+    this.speed = {
+      current: 0,
+      target: 0,
+      lerp: 0.1
+    }
+
     this.createGeometry()
     this.createGallery()
 
@@ -48,7 +54,10 @@ export default class Home {
   }
 
   createGeometry () {
-    this.geometry = new Plane(this.gl)
+    this.geometry = new Plane(this.gl, {
+      widthSegments: 20,
+      heightSegments: 20
+    })
   }
 
   createGallery () {
@@ -95,6 +104,8 @@ export default class Home {
   }
 
   onTouchDown ({ x, y }) {
+    this.speed.target = 1
+
     this.scrollCurrent.x = this.scroll.x
     this.scrollCurrent.y = this.scroll.y
   }
@@ -108,6 +119,7 @@ export default class Home {
   }
 
   onTouchUp ({ x, y }) {
+    this.speed.target = 0
   }
 
   onWheel ({ pixelX, pixelY }) {
@@ -120,6 +132,12 @@ export default class Home {
    */
   update () {
     if (!this.galleryBounds) return
+
+    // const a = this.x.target - this.x.current
+    // const b = this.y.target - this.y.current
+    //
+    // this.speed.target = Math.sqrt(a * a + b * b) * 0.01
+    this.speed.current = GSAP.utils.interpolate(this.speed.current, this.speed.target, this.speed.lerp)
 
     this.x.current = GSAP.utils.interpolate(this.x.current, this.x.target, this.x.lerp)
     this.y.current = GSAP.utils.interpolate(this.y.current, this.y.target, this.y.lerp)
@@ -140,43 +158,45 @@ export default class Home {
     this.scroll.y = this.y.current
 
     map(this.medias, media => {
+      const offsetX = this.sizes.width * 0.6
       const scaleX = media.mesh.scale.x / 2
 
       if (this.x.direction === 'left') {
         const x = media.mesh.position.x + scaleX
 
-        if (x < -this.sizes.width / 2) {
+        if (x < -offsetX) {
           media.extra.x += this.gallerySizes.width
           this.updateMeshRotation(media.mesh)
         }
       } else if (this.x.direction === 'right') {
         const x = media.mesh.position.x - scaleX
 
-        if (x > this.sizes.width / 2) {
+        if (x > offsetX) {
           media.extra.x -= this.gallerySizes.width
           this.updateMeshRotation(media.mesh)
         }
       }
 
+      const offsetY = this.sizes.height * 0.6
       const scaleY = media.mesh.scale.y / 2
 
       if (this.y.direction === 'up') {
         const y = media.mesh.position.y - scaleY
 
-        if (y > this.sizes.height / 2) {
+        if (y > offsetY) {
           media.extra.y += this.gallerySizes.height
           this.updateMeshRotation(media.mesh)
         }
       } else if (this.y.direction === 'down') {
         const y = media.mesh.position.y + scaleY
 
-        if (y < -this.sizes.height / 2) {
+        if (y < -offsetY) {
           media.extra.y -= this.gallerySizes.height
           this.updateMeshRotation(media.mesh)
         }
       }
 
-      media.update(this.scroll)
+      media.update(this.scroll, this.speed.current)
     })
   }
 
