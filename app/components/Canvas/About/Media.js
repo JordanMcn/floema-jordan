@@ -18,6 +18,10 @@ export default class Media {
     this.createMesh()
 
     this.extra = 0
+
+    this.createBounds({
+      sizes: this.sizes
+    })
   }
 
   createTexture () {
@@ -121,8 +125,6 @@ export default class Media {
   }
 
   update (scroll) {
-    if (!this.bounds) return
-
     this.updateRotation()
     this.updateScale()
     this.updateX(scroll)

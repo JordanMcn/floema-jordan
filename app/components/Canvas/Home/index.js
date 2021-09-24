@@ -47,6 +47,9 @@ export default class Home {
 
     this.createGeometry()
     this.createGallery()
+    this.onResize({
+      sizes: this.sizes
+    })
 
     this.group.setParent(this.scene)
 
@@ -131,8 +134,6 @@ export default class Home {
    * Update.
    */
   update () {
-    if (!this.galleryBounds) return
-
     // const a = this.x.target - this.x.current
     // const b = this.y.target - this.y.current
     //
