@@ -67,7 +67,6 @@ export default class Media {
 
     this.updateScale()
     this.updateX()
-    this.updateY()
   }
 
   /**
@@ -98,7 +97,6 @@ export default class Media {
 
     this.createBounds(sizes)
     this.updateX(scroll && scroll.x)
-    this.updateY(scroll && scroll.y)
   }
 
   /**
@@ -117,20 +115,20 @@ export default class Media {
     this.mesh.position.x = -(this.sizes.width / 2) + (this.mesh.scale.x / 2) + (this.x * this.sizes.width) + this.extra.x
   }
 
-  updateY (y = 0) {
-    this.y = (this.bounds.top - y) / window.innerHeight
-    this.mesh.position.y = (this.sizes.height / 2) - (this.mesh.scale.y / 2) - (this.y * this.sizes.height) - this.extra.y
-  }
-
-  update (scroll) {
+  update (scroll, index) {
     this.updateX(scroll)
-    this.updateY()
 
-    // this.opacity.target = this.index === index ? 1 : 0.4
-    // this.opacity.current = GSAP.utils.interpolate(this.opacity.current, this.opacity.target, this.opacity.lerp)
+    const amplitude = 0.1
+    const frequency = 1
 
-    // this.program.uniforms.uAlpha.value = this.opacity.current * this.opacity.multiplier
+    this.mesh.rotation.z = -0.02 * Math.PI * Math.sin(this.index / frequency)
+    this.mesh.position.y = amplitude * Math.sin(this.index / frequency)
 
-    this.program.uniforms.uAlpha.value = this.opacity.multiplier
+    this.opacity.target = this.index === index ? 1 : 0.4
+    this.opacity.current = GSAP.utils.interpolate(this.opacity.current, this.opacity.target, this.opacity.lerp)
+
+    this.program.uniforms.uAlpha.value = this.opacity.current * this.opacity.multiplier
+
+    // this.program.uniforms.uAlpha.value = this.opacity.multiplier
   }
 }

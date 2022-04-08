@@ -50,9 +50,9 @@ export default class Media {
       geometry: this.geometry
     })
 
-    this.mesh.setParent(this.scene)
+    this.mesh.rotation.z = GSAP.utils.random(-Math.PI * 0.03, Math.PI * 0.03)
 
-    // this.mesh.rotation.z = GSAP.utils.random(-Math.PI * 0.03, Math.PI * 0.03)
+    this.mesh.setParent(this.scene)
   }
 
   createBounds ({ sizes }) {
@@ -80,6 +80,9 @@ export default class Media {
   }
 
   hide () {
+    GSAP.to(this.program.uniforms.uAlpha, {
+      value: 0
+    })
   }
 
   /**
